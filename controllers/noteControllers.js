@@ -11,7 +11,6 @@ async function deleteNote(request, response) {
             const { data:newUpdatedTodo } = await axios.put(process.env.DB_TODO_ENDPOINT+"/"+tid, updatedTodo)
 
             response.json(newUpdatedTodo)
-
         }
         catch(err){
             response.status(err.response.status).json(err.message)

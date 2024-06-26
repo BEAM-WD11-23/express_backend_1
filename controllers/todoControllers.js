@@ -1,15 +1,15 @@
-var axios = require('axios');
+var todoService = require('../services/todo.service')
 
 function createTodo(request, response) {
+    // Library agnostic controller
     const todo = request.body
-
     if (todo){ 
-        axios.post(process.env.DB_TODO_ENDPOINT) 
-        .then(axiosRes => {
-            response.status(201).json(axiosRes.data)
+        todoService.createTodo(todo)
+        .then(dataObj => {
+            response.status(201).json(dataObj.data)
         })
-        .catch(axiosErr => {
-            response.status(axiosErr.response.status).json(axiosErr.message)
+        .catch(errorObj => {
+            response.status(errorObj.status).json(errorObj.message)
         })
     }
     else{
@@ -18,7 +18,7 @@ function createTodo(request, response) {
 }
 
 function getAllTodos(req, res) {
-    axios.get(process.env.DB_TODO_ENDPOINT)
+    todoService.getAllTodos()
     .then((axiosRes)=>{
         res.json(axiosRes.data)
     })
@@ -32,7 +32,7 @@ function editTodo (req, res){
     const tid = req.params.tid
 
     if(newData && tid){
-        axios.put(`${process.env.DB_TODO_ENDPOINT}/${tid}`, newData)
+        todoService.editTodo(tid, newData)
         .then(axiosResp => {
             res.status(201).json(axiosResp.data)
         })
@@ -49,11 +49,11 @@ function editTodo (req, res){
 function deleteTodo(req, res){
     const tid = req.params.tid
     if (tid){
-        axios.delete(process.env.DB_TODO_ENDPOINT+'/'+tid)
-        .then(axiosRes=>{
+        todoService.deleteTodo(tid)
+        .then(axiosRes => {
             res.json("Todo deleted successfully")
         })
-        .catch(axiosErr=>{
+        .catch(axiosErr => {
             res.status(axiosErr.response.status).json(axiosErr.message)
         })
     }
