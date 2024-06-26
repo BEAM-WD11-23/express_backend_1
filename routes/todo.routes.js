@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router()
 var todoController = require('../controllers/todoControllers');
+var { validateTodoMiddleware} = require('../middlewares/validateTodo')
 
 // Frontend wants to save a todo in backend. [http://localhost:4000/api/todos]
 // Prerequisities: new Todo Data
-router.post('/', todoController.createTodo)
+router.post('/', validateTodoMiddleware, todoController.createTodo)
 
 // Frontend wants to access all the todos in the database
 router.get('/', todoController.getAllTodos)
