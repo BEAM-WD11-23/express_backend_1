@@ -13,7 +13,10 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors())
+app.use(cors({
+    origin:'http://localhost:3000',
+    credentials: true
+}))
 
 // CRUD:::>> GET, POST, PUT, DELETE
 
@@ -23,7 +26,7 @@ app.use('/auth', authRoutes.router)
 
 app.get('/', (req, res) => res.send('<h1>Welcome to Todo BACKEND</h1>'))
 
-app.get('/dashboard', protectedMW, (req, res) => {
+app.get('/verify', protectedMW, (req, res) => {
     res.json(req.user)
 })
 

@@ -38,7 +38,7 @@ router.post('/login', (request, response) => {
         if(foundUser && foundUser.password === password){
             // Code if username and password are both correct
             delete foundUser.password
-            const token = jwt.sign(foundUser, process.env.JWT_SECRET, { expiresIn: '15s' })
+            const token = jwt.sign(foundUser, process.env.JWT_SECRET, { expiresIn: '1h' })
 
             response.cookie('token', token, { httpOnly: true})
 
