@@ -1,15 +1,18 @@
-var jwt = require("jsonwebtoken")
+var jwt = require('jsonwebtoken')
 
+function authProtected(request, response, next){
+    const token = request.cookies.token
 
-function protectedMW(req, res, next){
-    const token = req.cookies.token
-    try{
-        req.user = jwt.verify(token, process.env.JWT_SECRET)
+    if(!token) return response.status(401).json("You are not authorized, please log in.")
+
+    try {
+        jwt.verify(token, process.env.JWT_SECRET)
         next()
     }
     catch(err){
-        res.status(401).json("User not authorized.")
+        response.status(401).json("You are not authorized, please log in.")
     }
 }
 
-module.exports = { protectedMW }
+
+module.exports = { authProtected }
