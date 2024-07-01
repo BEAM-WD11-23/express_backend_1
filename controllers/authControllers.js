@@ -10,7 +10,7 @@ const db = [
 function login(request, response){
     const { username, password } = request.body
 
-    if(!username || !password) response.status(401).json("Missing credentials")
+    if(!username || !password) response.status(400).json("Missing credentials")
     else {
         const foundUser = db.find(user => user.username === username)
 
