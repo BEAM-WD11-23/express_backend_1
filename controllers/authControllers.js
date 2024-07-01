@@ -10,6 +10,7 @@ const db = [
 function login(request, response){
     const { username, password } = request.body
 
+
     if(!username || !password) response.status(400).json("Missing credentials")
     else {
         const foundUser = db.find(user => user.username === username)
@@ -17,7 +18,7 @@ function login(request, response){
         if(foundUser && foundUser.password === password){
             delete foundUser.password
             const token = jwt.sign(foundUser, process.env.JWT_SECRET, { expiresIn:'3m' })
-            response.cookie('token', token, { httpOnly: true, sameSite: "none" })
+            response.cookie('token', token, { httpOnly: true, sameSite: 'none' })
             response.json(foundUser)
         }
         else {
