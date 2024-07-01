@@ -17,7 +17,7 @@ function login(request, response){
         if(foundUser && foundUser.password === password){
             delete foundUser.password
             const token = jwt.sign(foundUser, process.env.JWT_SECRET, { expiresIn:'3m' })
-            response.cookie('token', token, { httpOnly: true })
+            response.cookie('token', token, { httpOnly: true, sameSite: "none" })
             response.json(foundUser)
         }
         else {
