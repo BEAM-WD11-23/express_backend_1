@@ -9,14 +9,14 @@ var { authProtected } = require('./middlewares/authMiddleware');
 var authController = require('./controllers/authControllers')
 
 
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true
+}))
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(cors({
-    origin: 'https://wd-todo-app-frontend.web.app',
-    credentials: true
-}))
 
 // CRUD:::>> GET, POST, PUT, DELETE
 // This checks/verifies the token

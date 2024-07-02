@@ -1,9 +1,9 @@
 var jwt = require('jsonwebtoken')
 
 const db = [
-    {uid:'u0001',username:'relando', name: 'Relando Vrapi', password: 'wd@1123'},
-    {uid:'u2222',username:'john', name: 'John Smith', password: 'wd@1123'},
-    {uid:'u7777',username:'sarah', name: 'Sarah Smith', password: 'wd@1123'},
+    {uid:'u0001', username:'relando', name: 'Relando Vrapi', password: 'wd@1123'},
+    {uid:'u2222', username:'john', name: 'John Smith', password: 'wd@1123'},
+    {uid:'u7777', username:'sarah', name: 'Sarah Smith', password: 'wd@1123'},
 ]
 
 
@@ -18,14 +18,7 @@ function login(request, response){
         if(foundUser && foundUser.password === password){
             delete foundUser.password
             const token = jwt.sign(foundUser, process.env.JWT_SECRET, { expiresIn:'3m' })
-            const cookieOptions = [
-                'token=' + token,
-                'HttpOnly',
-                'SameSite=None',
-                'Secure' // Ensure this is true for HTTPS
-            ].join('; ');
-        
-            response.setHeader('Set-Cookie', cookieOptions);
+            response.cookie("token", token, { httpOnly:true, SameSite:'None', secure:true })
             response.json(foundUser)
         }
         else {
@@ -36,7 +29,6 @@ function login(request, response){
 
 function check(request, response){
     const token = request.cookies.token
-
     if(!token) return response.status(401).json("User not logged in")
     
     try {
