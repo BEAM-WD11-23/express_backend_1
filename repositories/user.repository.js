@@ -1,24 +1,31 @@
-var { MongoClient } = require("mongodb");
+var { getCollection } = require('../config/db')
 
-const client = new MongoClient('mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.10')
-
-async function main(){
+async function getAllUsers(){
     try {
-        const database = client.db('test')
-        const usersCollection = database.collection('users')
-
-        await usersCollection.insertOne({name:'Anna Sarah Jackson', age: 22})
-
-        const allUsers = await usersCollection
-        .find({name: /sarah/i})
-        .project({_id:0, name:1})
-        .toArray()
-        
-        console.log(allUsers)
+        const usersCollection = await getCollection('users')
+        const allUsers = await usersCollection.find().project({password:0}).toArray()
+        console.dir(`Users fetched successfully in repository`, allUsers)
+        return allUsers
     }
-    catch(e){
-        console.log(e)
+    catch(error){
+        throw error
     }
 }
 
-main()
+async function getUserById(userId){
+    const usersCollection = await getCollection('users')
+    return usersCollection.findOne({_id: {$eq: userId}})
+}
+
+async function updateUser(userId, newData){
+    const usersCollection = await getCollection('users')
+    return usersCollection.updateOne({_id: {$eq: userId}}, {$set: newData})
+}
+
+async function deleteUser(userId){
+    const usersCollection = await getCollection('users')
+    return usersCollection.deleteOne({_id: {$eq: userId}})
+}
+
+
+module.exports = { getAllUsers, getUserById, updateUser, deleteUser }
