@@ -1,14 +1,8 @@
 var userRepository = require('../repositories/user.repository')
 
 async function getAllUsers(){
-    try {
-        const allUsers = await userRepository.getAllUsers()
-        console.dir(`Users fetched successfully in the service.`)
-        return allUsers
-    }
-    catch(error){
-        throw error
-    }
+    const allUsers = await userRepository.getAllUsers()
+    return allUsers
 }
 
 async function getUserById(userId){

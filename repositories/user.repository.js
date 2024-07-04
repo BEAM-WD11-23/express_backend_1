@@ -1,15 +1,9 @@
 var { getCollection } = require('../config/db')
 
 async function getAllUsers(){
-    try {
-        const usersCollection = await getCollection('users')
-        const allUsers = await usersCollection.find().project({password:0}).toArray()
-        console.dir(`Users fetched successfully in repository`, allUsers)
-        return allUsers
-    }
-    catch(error){
-        throw error
-    }
+    const usersCollection = await getCollection('users')
+    const allUsers = await usersCollection.find().project({password:0}).toArray()
+    return allUsers
 }
 
 async function getUserById(userId){
